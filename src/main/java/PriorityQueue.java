@@ -12,36 +12,27 @@ public class PriorityQueue<T extends Comparable> implements Queue<T> {
         this.head = new PriorityQueueElement(headValue);
     }
 
-    /**
-     * Constructor with initializing first element of the queue
-     * @param headValue     - first element of the queue
-     * @param priority - priority of the added element
-     */
-    public PriorityQueue(T headValue, int priority) {
-        this.head = new PriorityQueueElement(headValue, priority);
+    public PriorityQueue(T headValue, T... elements) {
+        this.head = new PriorityQueueElement(headValue);
     }
 
     public T pop() {
         return null;
     }
 
-    public void push(T elem) throws NullPointerQueueElementException {
-        push(elem, 0);
-    }
-
-    public void push(T elem, int priority) throws NullPointerQueueElementException {
+    public void push(T elem) {
         if (elem == null){
             throw new NullPointerQueueElementException("Element which you want to add is null");
         }
 
-        PriorityQueueElement newElement = new PriorityQueueElement(elem, priority);
+        PriorityQueueElement newElement = new PriorityQueueElement(elem);
 
         if (isEmpty()){
             head = newElement;
             return;
         }
 
-        PriorityQueueElement pivotElement = getLastElementWithGreaterOrSamePriority(priority);
+        PriorityQueueElement pivotElement = getLastElementWithGreaterOrSamePriority(newElement);
         insertElement(pivotElement, newElement);
     }
 
@@ -62,13 +53,13 @@ public class PriorityQueue<T extends Comparable> implements Queue<T> {
     }
 
     //<editor-fold desc="Private methods">
-    private void checkIfQueueIsEmpty() throws NullPointerQueueElementException {
+    private void checkIfQueueIsEmpty() {
         if (isEmpty()) {
             throw new NullPointerQueueElementException("The queue is empty");
         }
     }
 
-    private PriorityQueueElement getLastElementWithGreaterOrSamePriority(int priority) throws NullPointerQueueElementException {
+    private PriorityQueueElement getLastElementWithGreaterOrSamePriority(PriorityQueueElement newElement){
         if (isEmpty()) {
             throw new NullPointerQueueElementException("The queue is empty");
         }
@@ -79,9 +70,8 @@ public class PriorityQueue<T extends Comparable> implements Queue<T> {
 
         PriorityQueueElement lastElement = head;
 
-
         while (lastElement.hasNext()) {
-            if (lastElement.getNext().getPriority() > priority) {
+            if (lastElement.compareTo(newElement) >= 0) {
                 lastElement = lastElement.getNext();
             }
         }
