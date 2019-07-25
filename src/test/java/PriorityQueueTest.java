@@ -1,4 +1,5 @@
 import exceptions.EmptyQueueException;
+import exceptions.NullPointerQueueElementException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -101,11 +102,27 @@ class PriorityQueueTest {
 
     @Test()
     @DisplayName("Top() method test validating if method throw exception while queue is empty")
-    void shouldTopMethodReturnEmptyQueueExceptionWhenQueueIsEmpty(){
+    void shouldTopMethodThrowEmptyQueueExceptionWhenQueueIsEmpty(){
         priorityQueue = new PriorityQueue<>(SAMPLE_STRING);
         priorityQueue.top();
         Assertions.assertThrows(EmptyQueueException.class, () -> priorityQueue.top());
     }
+
+    @Test()
+    @DisplayName("Top() method test validating if method throw exception while queue is empty")
+    void shouldPushMethodThrowNullPointerQueueElementExceptionWhenElementToAddIsNull(){
+        priorityQueue = new PriorityQueue<>();
+        Assertions.assertThrows(NullPointerQueueElementException.class, () -> priorityQueue.push(null));
+    }
+
+    @Test()
+    @DisplayName("Pop() method test validating if method throw exception while queue is empty")
+    void shouldPopMethodReturnEmptyQueueExceptionWhenQueueIsEmpty(){
+        priorityQueue = new PriorityQueue<>(SAMPLE_STRING);
+        priorityQueue.pop();
+        Assertions.assertThrows(EmptyQueueException.class, () -> priorityQueue.pop());
+    }
+
 
     @Test
     @DisplayName("Push() method test validating if elements are put to proper place")

@@ -1,5 +1,3 @@
-package interfaces;
-
 public interface Queue<T extends Comparable> {
     T pop();
 

@@ -1,9 +1,8 @@
-import interfaces.QueueElement;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 @Data
-public class PriorityQueueElement<T extends Comparable> implements QueueElement, Comparable<PriorityQueueElement> {
+class PriorityQueueElement<T extends Comparable> implements QueueElement, Comparable<PriorityQueueElement> {
     private PriorityQueueElement next = null;
 
     private T content;

@@ -1,6 +1,5 @@
 import exceptions.EmptyQueueException;
 import exceptions.NullPointerQueueElementException;
-import interfaces.Queue;
 
 import java.util.stream.Stream;
 
@@ -87,15 +86,22 @@ public class PriorityQueue<T extends Comparable> implements Queue<T> {
         }
 
         PriorityQueueElement currentElement = head;
+
+        if (size() == 1){
+            head = null;
+            return (T) currentElement.getContent();
+        }
+
+        PriorityQueueElement previousElement = head;
+        currentElement = head.getNext();
         while (currentElement.hasNext()) {
+            previousElement = currentElement;
             currentElement = currentElement.getNext();
         }
 
-        T temp = (T) currentElement.getContent();
+        previousElement.setNext(null);
 
-        currentElement = null;
-
-        return temp;
+        return (T) currentElement.getContent();
     }
 
     public void clear() {
