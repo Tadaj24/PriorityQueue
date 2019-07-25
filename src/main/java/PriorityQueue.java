@@ -1,9 +1,13 @@
+import exceptions.EmptyQueueException;
 import exceptions.NullPointerQueueElementException;
 import interfaces.Queue;
+
+import java.util.stream.Stream;
 
 public class PriorityQueue<T extends Comparable> implements Queue<T> {
     PriorityQueueElement head;
 
+    //region Constructors
     public PriorityQueue() {
         PriorityQueueElement head = null;
     }
@@ -12,22 +16,44 @@ public class PriorityQueue<T extends Comparable> implements Queue<T> {
         this.head = new PriorityQueueElement(headValue);
     }
 
-    public PriorityQueue(T headValue, T... elements) {
-        this.head = new PriorityQueueElement(headValue);
+    public PriorityQueue(T firstValue, T secondValue) {
+        push(firstValue);
+        push(secondValue);
     }
 
+    public PriorityQueue(T firstValue, T secondValue, T thirdValue) {
+        push(firstValue);
+        push(secondValue);
+        push(thirdValue);
+    }
+
+    public PriorityQueue(T firstValue, T secondValue, T thirdValue, T... elements) {
+        push(firstValue);
+        push(secondValue);
+        push(thirdValue);
+        Stream.of(elements).forEach(x -> push(x));
+    }
+    //endregion
+
+    //region Queue interface methods
     public T pop() {
-        return null;
+        if (isEmpty()) {
+            throw new EmptyQueueException("The queue is empty");
+        }
+
+        PriorityQueueElement elementToReturn = head;
+        head = head.getNext();
+        return (T) elementToReturn.getContent();
     }
 
     public void push(T elem) {
-        if (elem == null){
-            throw new NullPointerQueueElementException("Element which you want to add is null");
+        if (elem == null) {
+            throw new NullPointerQueueElementException("Element which you want to add is null.");
         }
 
         PriorityQueueElement newElement = new PriorityQueueElement(elem);
 
-        if (isEmpty()){
+        if (isEmpty()) {
             head = newElement;
             return;
         }
@@ -40,28 +66,51 @@ public class PriorityQueue<T extends Comparable> implements Queue<T> {
         return head == null;
     }
 
-    public boolean size() {
-        return false;
+    public int size() {
+        if (isEmpty()) {
+            return 0;
+        }
+
+        int count = 1;
+        PriorityQueueElement currentElement = head;
+        while (currentElement.hasNext()) {
+            count++;
+            currentElement = currentElement.getNext();
+        }
+
+        return count;
     }
 
     public T top() {
-        return null;
+        if (isEmpty()) {
+            throw new EmptyQueueException("The queue is empty");
+        }
+
+        PriorityQueueElement currentElement = head;
+        while (currentElement.hasNext()) {
+            currentElement = currentElement.getNext();
+        }
+
+        T temp = (T) currentElement.getContent();
+
+        currentElement = null;
+
+        return temp;
     }
 
-    public void clean() {
-
+    public void clear() {
+        head = null;
     }
+    //endregion
 
-    //<editor-fold desc="Private methods">
-    private void checkIfQueueIsEmpty() {
+    //region Private methods
+    private PriorityQueueElement getLastElementWithGreaterOrSamePriority(PriorityQueueElement newElement) {
         if (isEmpty()) {
             throw new NullPointerQueueElementException("The queue is empty");
         }
-    }
 
-    private PriorityQueueElement getLastElementWithGreaterOrSamePriority(PriorityQueueElement newElement){
-        if (isEmpty()) {
-            throw new NullPointerQueueElementException("The queue is empty");
+        if (head.compareTo(newElement) > 0) {
+            return null;
         }
 
         if (!head.hasNext()) {
@@ -71,16 +120,25 @@ public class PriorityQueue<T extends Comparable> implements Queue<T> {
         PriorityQueueElement lastElement = head;
 
         while (lastElement.hasNext()) {
-            if (lastElement.compareTo(newElement) >= 0) {
+            if (lastElement.getNext().compareTo(newElement) <= 0) {
                 lastElement = lastElement.getNext();
+                continue;
             }
+
+            break;
         }
 
         return lastElement;
     }
 
     private void insertElement(PriorityQueueElement pivot, PriorityQueueElement elementToInput) {
-        if (!pivot.hasNext()){
+        if (pivot == null) {
+            elementToInput.setNext(head);
+            head = elementToInput;
+            return;
+        }
+
+        if (!pivot.hasNext()) {
             pivot.setNext(elementToInput);
             return;
         }
@@ -88,5 +146,25 @@ public class PriorityQueue<T extends Comparable> implements Queue<T> {
         elementToInput.setNext(pivot.getNext());
         pivot.setNext(elementToInput);
     }
-    //</editor-fold>
+
+    //endregion
+    //region Override methods
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Queue:\n");
+        if (isEmpty()) {
+            return "Queue is empty\n";
+        }
+
+        PriorityQueueElement currentElement = head;
+        sb.append(currentElement.getContent().toString() + "\n");
+
+        while (currentElement.hasNext()) {
+            currentElement = currentElement.getNext();
+            sb.append(currentElement.getContent().toString() + "\n");
+        }
+
+        return sb.toString();
+    }
+    //endregion
 }

@@ -1,5 +1,5 @@
 package interfaces;
 
-public interface QueueElement <T extends Comparable> {
+public interface QueueElement {
     boolean hasNext();
 }

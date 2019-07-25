@@ -1,22 +1,22 @@
 package exceptions;
 
-public class NullPointerQueueElementException extends RuntimeException {
-    public NullPointerQueueElementException() {
+public class EmptyQueueException extends RuntimeException {
+    public EmptyQueueException() {
     }
 
-    public NullPointerQueueElementException(String message) {
+    public EmptyQueueException(String message) {
         super(message);
     }
 
-    public NullPointerQueueElementException(String message, Throwable cause) {
+    public EmptyQueueException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public NullPointerQueueElementException(Throwable cause) {
+    public EmptyQueueException(Throwable cause) {
         super(cause);
     }
 
-    public NullPointerQueueElementException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public EmptyQueueException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

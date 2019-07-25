@@ -1,18 +1,15 @@
 package interfaces;
 
-
-import exceptions.NullPointerQueueElementException;
-
-public interface Queue <T extends Comparable> {
+public interface Queue<T extends Comparable> {
     T pop();
 
     void push(T elem);
 
     T top();
 
-    void clean();
+    void clear();
 
     boolean isEmpty();
 
-    boolean size();
+    int size();
 }
